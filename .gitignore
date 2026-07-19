@@ -1,0 +1,31 @@
+# Power BI cache
+*.pbix.autosave
+
+# Temporary Files
+*.tmp
+*.bak
+
+# Logs
+*.log
+
+# OS
+Thumbs.bd
+desktop.ini
+
+# Python
+_paycache_/
+
+# VS Code
+.vscode/
+
+# DBeaver
+.metadata/
+
+# OneDrive Temporary Files
+~$*
+
+# Source Data
+data/
+
+# Word
+*.docx
