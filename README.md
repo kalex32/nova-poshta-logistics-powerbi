@@ -70,29 +70,7 @@ Nova_Poshta_Analytics/
 
 ## ETL Pipeline
 
-```text
-CSV exports
-      │
-      ▼
-shipments_raw
-      │
-      ▼
-shipments_clean
-(remove duplicates)
-      │
-      ▼
-shipments_final
-(transform & classify)
-      │
-      ├──────────────► dim_business_sender
-      │
-      ▼
-v_shipments_business
-(filter business incoming shipments)
-      │
-      ▼
-Power BI
-```
+![ETL Pipeline](images/etl_pipeline.png)
 
 The ETL pipeline separates raw data ingestion, data cleansing, transformation, and reporting into independent stages. This layered approach simplifies maintenance, improves data quality, and supports incremental updates without rebuilding the entire dataset.
 
