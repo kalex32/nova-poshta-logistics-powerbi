@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project demonstrates a complete data analytics workflow using real shipment data exported from Nova Poshta.
+This project demonstrates a complete data analytics workflow using real shipment data exported from Nova Poshta. The public version of this project uses anonymized reporting views to remove personally identifiable sender information while preserving the analytical model.
 
 The project includes the following components:
 
@@ -49,7 +49,7 @@ Nova_Poshta_Analytics/
 │   └── 05_update_database.sql
 │
 ├── powerbi/
-│   └── Nova_Poshta_Analytics.pbix
+│   └── Nova_Poshta_Logistics_Analytics.pbix
 │
 ├── images/
 │
@@ -65,7 +65,7 @@ Nova_Poshta_Analytics/
 | `01_create_schema.sql`        | Creates the database schema and tables                |
 | `02_prepare_data.sql`         | Cleans historical shipment data and transforms it into an analytical model  |
 | `03_create_dimensions.sql`    | Builds and populates the business sender dimension    |
-| `04_create_views.sql`         | Creates reporting views used by Power BI              |
+| `04_create_views.sql`         | Creates internal and public reporting views for analytical reporting.  |
 | `05_update_database.sql`      | Performs incremental updates by inserting only new shipment records and updating dimensions  |
 
 ## ETL Pipeline
@@ -75,6 +75,8 @@ Nova_Poshta_Analytics/
 The ETL pipeline separates raw data ingestion, data cleansing, transformation, and reporting into independent stages. This layered approach simplifies maintenance, improves data quality, and supports incremental updates without rebuilding the entire dataset.
 
 The analytical model stores all cleaned shipments in 'shipments_final' (126 records). The Power BI dashboard is built on 'v_shipments_business', which filters the dataset to 102 business-related incoming shipments.
+
+The reporting layer is separated into internal and public SQL views. Internal views expose full business information, while public views anonymize sender identities for the portfolio version of the Power BI report.
 
 ## Power BI Dashboard
 
@@ -102,6 +104,8 @@ The Business Senders page focuses on:
 - shipment trends
 
 ![Business](images/top_sender.png)
+
+The repository contains the public Power BI report built on anonymized SQL views. A separate internal report uses the corresponding internal views with real sender identities.
 
 The report also uses a custom tooltip page to display additional sender metrics without overcrowding the main dashboard.
 
@@ -141,6 +145,14 @@ Instead of rebuilding the database, the update process:
 
 This approach preserves historical data while allowing the analytical model to grow over time.
 
+## Data Privacy
+
+The repository contains only anonymized reporting views.
+
+Business sender names and phone numbers remain available only in the internal reporting layer and are excluded from the public Power BI report.
+
+The public dashboard replaces sender identities with synthetic identifiers (BS001, BS002, ...), allowing the analytical model to be shared without exposing personal information.
+
 ## Validation
 
 The ETL pipeline was validated using both the initial historical dataset and a subsequent shipment export.
@@ -149,8 +161,8 @@ The ETL pipeline was validated using both the initial historical dataset and a s
 |-----------------------------|-----------|---------------|
 | shipments_clean             | 110       | 126           |
 | shipments_final             | 110       | 126           |
-| business senders            | 46        | 53            |
-| business shipments (view)   | 88        | 102           |
+| business_senders            | 46        | 53            |
+| v_shipments_business        | 88        | 102           |
 
 The successful validation confirms that the incremental ETL process preserves historical data while importing only newly detected shipments.
 
@@ -161,7 +173,7 @@ Future development may include:
 - publishing the report to Power BI Service
 - creating an interactive PowerPoint presentation
 - designing a mobile-optimized Power BI report layout
-- improving supplier identification by replacing contact-based sender classification with a dedicated supplier mapping
+- mapping multiple shipment senders to actual suppliers using additional business reference data provided by the company
 - redesigning the incremental loading process to use database constraints (`UNIQUE`) and conflict handling (`ON CONFLICT`) for more efficient data ingestion
 - automating CSV import and ETL execution
 - adding geographic analysis of shipment destinations
