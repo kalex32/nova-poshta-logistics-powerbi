@@ -112,6 +112,18 @@ The report also uses a custom tooltip page to display additional sender metrics 
 ![Tooltip](images/tooltip.png)
 Custom tooltip displaying additional sender metrics on hover.
 
+### Data Model
+
+The Power BI model uses a dedicated `Created_Date` column derived from the `created_at` timestamp to establish the relationship between the fact table and the calendar dimension.
+
+```
+Fact_shipments[Created_Date] → Dim_Date[Date]
+```
+
+This date-only column enables correct time-based filtering and aggregation because the source shipment timestamp includes both date and time components.
+
+Note: When rebuilding the Power BI model from scratch, recreate the Created_Date calculated column before linking the fact table to the calendar dimension.
+
 ## Business Insights
 
 Analysis of business incoming shipments (January–June 2026) revealed several operational patterns:
