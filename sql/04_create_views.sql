@@ -14,7 +14,8 @@ SELECT
 	sender_id,
     sender_contact,
     sender_phone,
-    sender_city
+    sender_city,
+    split_part(sender_contact, ' ', 1) AS sender_last_name
    FROM np.dim_business_sender;
 
 CREATE OR REPLACE VIEW np.v_business_sender_public AS
